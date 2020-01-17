@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import GridList from "./components/GridList";
-import ProductCard from "./components/ProductCard";
-import AdCard from "./components/AdCard";
+import { ThemeProvider } from "styled-components";
+import theme from "./theme";
+import GlobalStyles from "./styles";
 import useFetch from "./hooks/useFetch";
 import fetchProductRequest from "../api/products/fetchProducts";
 import fetchAdURLRequest from "../api/ads/fetchAdURL";
+import GridList from "./components/GridList";
+import ProductCard from "./components/ProductCard";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import AdCard from "./components/AdCard";
 
 export default props => {
 	// CONSTANTS
@@ -66,7 +71,6 @@ export default props => {
 	// FUNCTIONS
 
 	const loadMoreIfBottom = () => {
-		console.log("CHECK BOTTOM");
 		if (skeletonLimit > 0) {
 			return;
 		}
@@ -78,7 +82,6 @@ export default props => {
 	};
 
 	const loadMoreIfIdle = () => {
-		console.log("CHECK IDLE");
 		if (skeletonLimit > 0) {
 			return;
 		}
@@ -95,14 +98,13 @@ export default props => {
 		const viewPortBottom = window.pageYOffset + window.innerHeight;
 		const listBottom =
 			gridListRef.current.offsetHeight + gridListRef.current.offsetTop;
-		if (viewPortBottom > listBottom - 10) {
+		if (viewPortBottom > listBottom - 200) {
 			return true;
 		}
 		return false;
 	};
 
 	const handleFetchProducts = reset => {
-		console.log(products.length);
 		const { waiting } = fetchProductState;
 		if (waiting) {
 			return;
@@ -171,7 +173,9 @@ export default props => {
 	}, [skeletonLimit]);
 
 	return (
-		<>
+		<ThemeProvider theme={theme}>
+			<GlobalStyles />
+			<Header sortBy={sortBy} />
 			<select value={sortBy} onChange={handleSortChange}>
 				<option value="price">price</option>
 				<option value="size">size</option>
@@ -199,7 +203,7 @@ export default props => {
 					})}
 				</>
 			</GridList>
-			{endOfCatalogue ? "End Of Catlogue" : "Loading..."}
-		</>
+			<Footer loading={!endOfCatalogue} />
+		</ThemeProvider>
 	);
 };

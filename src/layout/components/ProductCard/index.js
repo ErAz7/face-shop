@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import GridList from "../GridList";
 
-// define the base and logic for the component,
 // this component will receive product data and display
 // it in a card
 export const ProductCard = props => {
@@ -9,7 +9,6 @@ export const ProductCard = props => {
 	return <div {...others} />;
 };
 
-// style and export component, thanks to 'styled-components'
 export default styled(ProductCard)`
 	background-color: rgb(
 		120,
@@ -23,4 +22,6 @@ export default styled(ProductCard)`
 	margin: 5px 1.5%;
 	align-items: center;
 	justify-content: center;
+	${GridList} & {
+	}
 `;

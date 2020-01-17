@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import GridList from "../GridList";
 
-// define the base and logic for the component,
 // this component will receive ad data and display
 // it in a card
 export const AdCard = props => {
@@ -13,7 +13,6 @@ export const AdCard = props => {
 	);
 };
 
-// style and export component, thanks to 'styled-components'
 export default styled(AdCard)`
 	display: flex;
 	width: 100%;
@@ -21,5 +20,7 @@ export default styled(AdCard)`
 	background-color: red;
 	justify-content: center;
 	> img {
+	}
+	${GridList} & {
 	}
 `;
