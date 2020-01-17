@@ -9,4 +9,10 @@ export const GridList = React.forwardRef((props, ref) => (
 ));
 
 // style and export component, thanks to 'styled-components'
-export default styled(GridList)``;
+export default styled(GridList)`
+	min-height: 40px;
+	background-color: rgb(200, 200, 200);
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 0 100px 0;
+`;

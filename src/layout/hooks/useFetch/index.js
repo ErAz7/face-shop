@@ -27,15 +27,15 @@ export default function() {
         try {
             const promise = axios(request);
 
-            const { data } = await promise;
+            const response = await promise;
 
             if (onSuccess) {
-                onSuccess(data);
+                onSuccess(response);
             }
             setState({
                 ...state,
                 waiting: false,
-                data: data
+                data: response.data
             });
 
             return promise;
