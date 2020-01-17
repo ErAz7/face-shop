@@ -18,4 +18,7 @@ export default ({ page, limit, sort } = {}) => {
 // this function takes query, filter name and filter,
 // applies filters and returns new query
 const addFilter = (query, name, value) =>
-	query + (value ? `${query === "" ? "?" : "&"}_${name}=${value}` : "");
+	query +
+	(value === 0 || value
+		? `${query === "" ? "?" : "&"}_${name}=${value}`
+		: "");

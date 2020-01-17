@@ -11,27 +11,27 @@ export default props => {
 
 	const chunkSize = 16;
 	const insertAdEvery = 20;
-	const initialProducts = [];
-	const initialAds = [];
 	const initialLimit = chunkSize;
-	const initialSkeletonLimit = 0;
 	const preLoadAdsCount = 5;
 
 	// HOOKS
 
 	const { state: fetchProductState, fetch: fetchProducts } = useFetch();
 	const { state: fetchAdsURLState, fetch: fetchAdsURL } = useFetch();
-	const [products, setProducts] = useState(initialProducts);
-	const [ads, setAds] = useState(initialAds);
+	const [products, setProducts] = useState([]);
+	const [ads, setAds] = useState([]);
 	const [limit, setLimit] = useState(initialLimit);
-	const [skeletonLimit, setSkeletonLimit] = useState(initialSkeletonLimit);
+	const [skeletonLimit, setSkeletonLimit] = useState(0);
 	const [sortBy, setSortBy] = useState("price");
+	const [endOfCatalogue, setEndOfCatalogue] = useState(false);
 
 	const gridListRef = useRef();
 
 	useEffect(() => {
 		setLimit(0);
-		setAds(initialAds);
+		setProducts([]);
+		setEndOfCatalogue(false);
+		setAds([]);
 		setSkeletonLimit(chunkSize);
 		handleFetchProducts(true);
 		handleFetchAdsURL();
@@ -51,17 +51,22 @@ export default props => {
 	// intervals but it badly affects performance when user
 	// scrolls, so intervals are more performant)
 	useEffect(() => {
+		if (endOfCatalogue) {
+			expandVisible();
+			return;
+		}
 		const bottomChecker = setInterval(loadMoreIfBottom, 200);
 		const idleChecker = setInterval(loadMoreIfIdle, 5000);
 		return () => {
 			clearInterval(bottomChecker);
 			clearInterval(idleChecker);
 		};
-	}, [fetchProductState, fetchAdsURLState]);
+	}, [fetchProductState, fetchAdsURLState, endOfCatalogue]);
 
 	// FUNCTIONS
 
 	const loadMoreIfBottom = () => {
+		console.log("CHECK BOTTOM");
 		if (skeletonLimit > 0) {
 			return;
 		}
@@ -73,6 +78,7 @@ export default props => {
 	};
 
 	const loadMoreIfIdle = () => {
+		console.log("CHECK IDLE");
 		if (skeletonLimit > 0) {
 			return;
 		}
@@ -96,13 +102,14 @@ export default props => {
 	};
 
 	const handleFetchProducts = reset => {
+		console.log(products.length);
 		const { waiting } = fetchProductState;
 		if (waiting) {
 			return;
 		}
 		fetchProducts(
 			fetchProductRequest({
-				page: 1,
+				page: reset ? 1 : parseInt(products.length / chunkSize) + 1,
 				limit: chunkSize,
 				sort: sortBy
 			}),
@@ -110,9 +117,13 @@ export default props => {
 		);
 	};
 	const handleFetchProductsSuccess = reset => response => {
-		setSkeletonLimit(initialSkeletonLimit);
+		const { data } = response;
+		setSkeletonLimit(0);
 		reset && setLimit(initialLimit);
-		setProducts(reset ? response.data : products.concat(response.data));
+		setProducts(reset ? data : products.concat(data));
+		if (data.length < chunkSize) {
+			setEndOfCatalogue(true);
+		}
 	};
 
 	const handleFetchAdsURL = () => {
@@ -158,9 +169,9 @@ export default props => {
 		}
 		return out;
 	}, [skeletonLimit]);
+
 	return (
 		<>
-			{fetchAdsURLState.waiting ? "WAITING" : "IDLE"}
 			<select value={sortBy} onChange={handleSortChange}>
 				<option value="price">price</option>
 				<option value="size">size</option>
@@ -188,6 +199,7 @@ export default props => {
 					})}
 				</>
 			</GridList>
+			{endOfCatalogue ? "End Of Catlogue" : "Loading..."}
 		</>
 	);
 };
