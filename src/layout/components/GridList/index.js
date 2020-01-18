@@ -1,18 +1,28 @@
 import React from "react";
 import styled from "styled-components";
+import Grid from "@material-ui/core/Grid";
 
-// define the base and logic for the component,
-// this component will receive cards as 'children' and
-// display them in a responsive grid view
-export const GridList = React.forwardRef((props, ref) => (
-	<div ref={ref} {...props} />
-));
+const GridList = React.forwardRef((props, ref) => {
+	const { children, ...others } = props;
+	const breakpoints = {
+		xs: 11,
+		sm: 10
+	};
+	return (
+		<div ref={ref} {...others}>
+			<Container container item {...breakpoints}>
+				{children}
+			</Container>
+		</div>
+	);
+});
 
-// style and export component, thanks to 'styled-components'
-export default styled(GridList)`
-	min-height: 40px;
-	background-color: rgb(200, 200, 200);
-	display: flex;
+const Container = styled(Grid)`
+	display: inline-flex;
+	justify-content: space-between;
 	flex-wrap: wrap;
-	margin: 0 0 100px 0;
+`;
+
+export default styled(GridList)`
+	text-align: center;
 `;

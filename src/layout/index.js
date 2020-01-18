@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { ThemeProvider } from "styled-components";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { StylesProvider } from "@material-ui/core";
 import theme from "./theme";
 import GlobalStyles from "./styles";
 import useFetch from "./hooks/useFetch";
@@ -10,6 +12,8 @@ import ProductCard from "./components/ProductCard";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AdCard from "./components/AdCard";
+
+const MUIMergedTheme = createMuiTheme(theme);
 
 export default props => {
 	// CONSTANTS
@@ -55,18 +59,18 @@ export default props => {
 	// (could listen on window 'scroll' event instead of
 	// intervals but it badly affects performance when user
 	// scrolls, so intervals are more performant)
-	useEffect(() => {
-		if (endOfCatalogue) {
-			expandVisible();
-			return;
-		}
-		const bottomChecker = setInterval(loadMoreIfBottom, 200);
-		const idleChecker = setInterval(loadMoreIfIdle, 5000);
-		return () => {
-			clearInterval(bottomChecker);
-			clearInterval(idleChecker);
-		};
-	}, [fetchProductState, fetchAdsURLState, endOfCatalogue]);
+	// useEffect(() => {
+	// 	if (endOfCatalogue) {
+	// 		expandVisible();
+	// 		return;
+	// 	}
+	// 	const bottomChecker = setInterval(loadMoreIfBottom, 200);
+	// 	const idleChecker = setInterval(loadMoreIfIdle, 5000);
+	// 	return () => {
+	// 		clearInterval(bottomChecker);
+	// 		clearInterval(idleChecker);
+	// 	};
+	// }, [fetchProductState, fetchAdsURLState, endOfCatalogue]);
 
 	// FUNCTIONS
 
@@ -173,37 +177,43 @@ export default props => {
 	}, [skeletonLimit]);
 
 	return (
-		<ThemeProvider theme={theme}>
-			<GlobalStyles />
-			<Header sortBy={sortBy} />
-			<select value={sortBy} onChange={handleSortChange}>
-				<option value="price">price</option>
-				<option value="size">size</option>
-				<option value="id">id</option>
-			</select>
-			<GridList ref={gridListRef}>
-				<>
-					{skeletonProducts.map(product => (
-						<ProductCard key={product} skeleton>
-							FACE HERE
-						</ProductCard>
-					))}
-					{displayProducts.map((product, index) => {
-						const modeAdEvery = (index + 1) % insertAdEvery;
-						const adIndex = parseInt(index / insertAdEvery);
-						const ad = ads[adIndex];
-						return (
-							<React.Fragment key={Math.random()}>
-								<ProductCard>{product.face}</ProductCard>
-								{!modeAdEvery && ad && (
-									<AdCard src={ad} alt="adv" />
-								)}
-							</React.Fragment>
-						);
-					})}
-				</>
-			</GridList>
-			<Footer loading={!endOfCatalogue} />
-		</ThemeProvider>
+		<StylesProvider injectFirst>
+			<ThemeProvider theme={MUIMergedTheme}>
+				<GlobalStyles />
+				<Header sortBy={sortBy} onSortChange={handleSortChange} />
+				<GridList ref={gridListRef}>
+					<>
+						{skeletonProducts.map(product => (
+							<ProductCard key={product} skeleton>
+								FACE HERE
+							</ProductCard>
+						))}
+						{displayProducts.map((product, index) => {
+							const modeAdEvery = (index + 1) % insertAdEvery;
+							const adIndex = parseInt(index / insertAdEvery);
+							const ad = ads[adIndex];
+							return (
+								<React.Fragment key={Math.random()}>
+									<ProductCard
+										size={product.size}
+										face={product.face}
+										date={product.date}
+										price={product.price}
+									/>
+									{!modeAdEvery && (
+										<AdCard
+											src={ad}
+											skeleton={ad}
+											alt="adv"
+										/>
+									)}
+								</React.Fragment>
+							);
+						})}
+					</>
+				</GridList>
+				<Footer loading={!endOfCatalogue} />
+			</ThemeProvider>
+		</StylesProvider>
 	);
 };
