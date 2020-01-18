@@ -1,12 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const Footer = props => {
-	const { price, ...others } = props;
+	const { skeleton, price, ...others } = props;
+
+	if (skeleton) {
+		return <Skeleton variant="rect" {...others}></Skeleton>;
+	}
 
 	return (
-		<div container {...others}>
+		<div {...others}>
 			<Price>
 				<Dollar>$</Dollar>
 				{price / 100}
@@ -40,7 +45,9 @@ const Price = styled.div`
 
 const Buy = styled.div`
 	width: 100%;
+	height: 100%;
 	color: ${({ theme }) => theme.palette.ultraLight.main};
+	background-color: ${({ theme }) => theme.palette.primary.main};
 	font-size: 30px;
 `;
 
@@ -55,5 +62,4 @@ export default styled(Footer)`
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
-	background-color: ${({ theme }) => theme.palette.primary.main};
 `;

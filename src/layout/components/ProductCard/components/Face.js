@@ -1,9 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 import FormatSizeIcon from "@material-ui/icons/FormatSize";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const Face = props => {
-	const { date, face, size, ...others } = props;
+	const { date, skeleton, face, size, ...others } = props;
+
+	if (skeleton) {
+		return (
+			<div {...others}>
+				<Text>
+					<SkeletonText variant="text" />
+				</Text>
+				<Top>
+					<SkeletonSize variant="rect" />
+					<Date>
+						<SkeletonDate variant="text" />
+					</Date>
+				</Top>
+			</div>
+		);
+	}
 
 	return (
 		<div {...others}>
@@ -18,6 +35,21 @@ const Face = props => {
 		</div>
 	);
 };
+
+const SkeletonText = styled(Skeleton)`
+	width: 120px;
+	height: 40px;
+`;
+const SkeletonSize = styled(Skeleton)`
+	padding: 25px;
+	height: 0;
+	border-radius: 0 0 5px 0;
+`;
+const SkeletonDate = styled(Skeleton)`
+	width: 100px;
+	height: 20px;
+	display: inline-block;
+`;
 
 const Top = styled.div`
 	display: flex;

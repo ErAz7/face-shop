@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import Skeleton from "@material-ui/core/Button";
 import Face from "./components/Face";
 import Footer from "./components/Footer";
 
@@ -10,10 +12,10 @@ const ProductCard = props => {
 
 	return (
 		<div {...others}>
-			<RatioContainer>
-				<ContentContainer>
-					<Face size={size} face={face} />
-					<Footer price={price} date={date} />
+			<RatioContainer disabled={skeleton}>
+				<ContentContainer skeleton={skeleton}>
+					<Face skeleton={skeleton} size={size} face={face} />
+					<Footer skeleton={skeleton} price={price} date={date} />
 				</ContentContainer>
 			</RatioContainer>
 		</div>
@@ -31,17 +33,16 @@ const ContentContainer = styled.div`
 	justify-content: space-between;
 	border-radius: 5px;
 	overflow: hidden;
-	cursor: pointer;
-	transition: box-shadow 1s;
-	background-color: ${({ theme }) => theme.palette.dark.main};
+	transition: box-shadow 0.4s;
+	background-color: ${({ theme, skeleton }) =>
+		skeleton ? theme.palette.grey[500] : theme.palette.dark.main};
 	color: ${({ theme }) => theme.palette.secondary.main};
 	&:hover {
-		box-shadow: 0px 1px 10px 3px
-			${({ theme }) => theme.palette.primary.main};
+		box-shadow: 0px 0px 12px 2px ${({ theme }) => theme.palette.dark.main};
 	}
 `;
 
-const RatioContainer = styled.div`
+const RatioContainer = styled(Button)`
 	position: relative;
 	padding-top: 100%;
 	width: 100%;
