@@ -1,20 +1,30 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import Face from "./components/Face";
 import Footer from "./components/Footer";
+import centToDollar from "../../functions/centToDollar";
+import relativeDate from "../../functions/relativeDate";
 
-const widths = { xs: 98, sm: 45, md: 22 };
+// renders product card responsively,
+// uses react memo to avoid unnecessary
+// re-renders
+
+const widths = { xs: 98, sm: 45, md: 24 };
 
 const ProductCard = props => {
 	const { skeleton, children, size, face, date, price, ...others } = props;
-
 	return (
 		<div {...others}>
 			<RatioContainer disabled={skeleton}>
 				<ContentContainer skeleton={skeleton}>
-					<Face skeleton={skeleton} size={size} face={face} />
-					<Footer skeleton={skeleton} price={price} date={date} />
+					<Face
+						date={relativeDate(date)}
+						skeleton={skeleton}
+						size={size}
+						face={face}
+					/>
+					<Footer skeleton={skeleton} price={centToDollar(price)} />
 				</ContentContainer>
 			</RatioContainer>
 		</div>
@@ -47,7 +57,7 @@ const RatioContainer = styled(Button)`
 	width: 100%;
 `;
 
-export default styled(ProductCard)`
+const StyledProductCard = styled(ProductCard)`
 	margin: 3% 0;
 	width: ${widths.xs}%;
 	${({ theme }) => theme.breakpoints.up("sm")} {
@@ -57,3 +67,14 @@ export default styled(ProductCard)`
 		width: ${widths.md}%;
 	}
 `;
+
+export default memo(StyledProductCard, (prev, next) => {
+	return (
+		prev.skeleton === next.skeleton &&
+		prev.children === next.children &&
+		prev.size === next.size &&
+		prev.face === next.face &&
+		prev.date === next.date &&
+		prev.price === next.price
+	);
+});

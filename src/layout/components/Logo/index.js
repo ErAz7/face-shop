@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 
+// this is the app logo
+
 const Logo = props => {
 	const { ...others } = props;
 	return <InsertEmoticonIcon {...others} />;

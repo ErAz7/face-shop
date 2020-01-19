@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import Grid from "@material-ui/core/Grid";
 
+// this is the container for grid list
+
 const GridList = React.forwardRef((props, ref) => {
 	const { children, ...others } = props;
 	const breakpoints = {

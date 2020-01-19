@@ -42,6 +42,7 @@ const Catalogue = props => {
 		setSkeletonLimit(chunkSize);
 		handleFetchProducts(true);
 		handleFetchAdsURL();
+		window.scrollTo(0, 0);
 	}, [sortBy]);
 
 	// set two intervals:
@@ -53,22 +54,24 @@ const Catalogue = props => {
 	// 	2. 'idleChecker' to fetch more items every
 	//  5 seconds in order to improve UX, also will
 	//  load ads to show every 'insertAdEvery' (20 for now)
-	//	item
+	//	item, this fetch when some timeout passed after
+	//  last user action, like mouse and keyboard events
+	//  but it's very rare and 5 seconds seems more useful
+	//  to pre-fetch
 	// (could listen on window 'scroll' event instead of
 	// intervals but it badly affects performance when user
 	// scrolls, so intervals are more performant)
-	// useEffect(() => {
-	// 	if (endOfCatalogue) {
-	// 		expandVisible();
-	// 		return;
-	// 	}
-	// 	const bottomChecker = setInterval(loadMoreIfBottom, 200);
-	// 	const idleChecker = setInterval(loadMoreIfIdle, 5000);
-	// 	return () => {
-	// 		clearInterval(bottomChecker);
-	// 		clearInterval(idleChecker);
-	// 	};
-	// }, [fetchProductState, fetchAdsURLState, endOfCatalogue]);
+	useEffect(() => {
+		if (AllCatalogueShown) {
+			return;
+		}
+		const bottomChecker = setInterval(loadMoreIfBottom, 200);
+		const idleChecker = setInterval(loadMoreIfIdle, 5000);
+		return () => {
+			clearInterval(bottomChecker);
+			clearInterval(idleChecker);
+		};
+	}, [fetchProductState, fetchAdsURLState, endOfCatalogue, limit, products]);
 
 	// FUNCTIONS
 
@@ -107,6 +110,10 @@ const Catalogue = props => {
 	};
 
 	const handleFetchProducts = reset => {
+		if (endOfCatalogue && !reset) {
+			return;
+		}
+
 		const { waiting } = fetchProductState;
 		if (waiting) {
 			return;
@@ -131,6 +138,10 @@ const Catalogue = props => {
 	};
 
 	const handleFetchAdsURL = () => {
+		if (endOfCatalogue) {
+			return;
+		}
+
 		const { waiting } = fetchAdsURLState;
 		if (waiting) {
 			return;
@@ -160,6 +171,8 @@ const Catalogue = props => {
 
 	// RENDER VARIABLES
 
+	const AllCatalogueShown = endOfCatalogue && products.length <= limit;
+
 	const displayProducts = products.slice(0, limit);
 
 	// create array with 'skeletonLimit' number
@@ -178,7 +191,8 @@ const Catalogue = props => {
 	// sortBy state by global state like Redux or React Context
 	// but for now, it was easier to put it here to avoid state
 	// complexity by adding global state, however for a large scale
-	// app, global states are inevitable
+	// app, global state is inevitable
+	console.log(products.length, limit, skeletonLimit);
 	return (
 		<div {...others}>
 			<Header
@@ -196,22 +210,20 @@ const Catalogue = props => {
 						const adIndex = parseInt(index / insertAdEvery);
 						const ad = ads[adIndex];
 						return (
-							<React.Fragment key={Math.random()}>
+							<React.Fragment key={product.id}>
 								<ProductCard
 									size={product.size}
 									face={product.face}
 									date={product.date}
 									price={product.price}
 								/>
-								{!modeAdEvery && (
-									<AdCard src={ad} skeleton={ad} alt="adv" />
-								)}
+								{!modeAdEvery && <AdCard src={ad} alt="adv" />}
 							</React.Fragment>
 						);
 					})}
 				</>
 			</GridList>
-			<Footer loading={!endOfCatalogue} />
+			<Footer hide={skeletonLimit} loading={!AllCatalogueShown} />
 		</div>
 	);
 };

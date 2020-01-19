@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import FormatSizeIcon from "@material-ui/icons/FormatSize";
 import Skeleton from "@material-ui/lab/Skeleton";
 
+// renders face, size, and date
+// has an option to zoom out the face
+// if it was larger than the card size.
+// zoom ratio is calculated based on
+// size and face cahracter count
+
 const Face = props => {
 	const { date, skeleton, face, size, ...others } = props;
+
+	const [zoom, setZoom] = useState(false);
+
+	const handleZoom = () => setZoom(!zoom);
 
 	if (skeleton) {
 		return (
@@ -23,18 +33,39 @@ const Face = props => {
 	}
 
 	return (
-		<div {...others}>
-			<Text size={size}>{face}</Text>
+		<div onClick={handleZoom} {...others}>
 			<Top>
 				<Size>
 					<FormatSizeIcon />
 					{size}
 				</Size>
-				<Date>2 weeks ago</Date>
+				<Date>{date}</Date>
 			</Top>
+			<Text
+				zoom={zoom}
+				ratio={(20 * 1) / (face.length + size)}
+				size={size}
+			>
+				{face}
+			</Text>
+			<ZoomText zoom={zoom}>
+				{zoom ? "Tap for original" : "Tap to zoom out"}
+			</ZoomText>
 		</div>
 	);
 };
+
+const ZoomText = styled.div`
+	position: absolute;
+	bottom: 2px;
+	left: 0;
+	font-size: 14px;
+	width: 100%;
+	text-align: center;
+	color: ${({ theme, zoom }) =>
+		zoom ? theme.palette.secondary.main : theme.palette.semiLight.main};
+	text-transform: none;
+`;
 
 const SkeletonText = styled(Skeleton)`
 	width: 120px;
@@ -71,7 +102,9 @@ const Text = styled.div`
 	top: 0;
 	left: 0;
 	white-space: nowrap;
+	transition: transform 0.5s;
 	font-size: ${({ size }) => size}px;
+	transform: scale(${({ zoom, ratio }) => (zoom ? ratio : "1")});
 `;
 
 const Size = styled.div`
@@ -87,6 +120,7 @@ const Date = styled.div`
 	padding: 10px;
 	border-radius: 0 0 5px 0;
 	width: 100%;
+	text-transform: none;
 `;
 
 export default styled(Face)`

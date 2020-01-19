@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import HeaderButton from "./HeaderButton";
 
+// renders options to sort products
+// changes size and content for
+// responsiveness
+
 const SortBy = props => {
 	const { shrink, show, value, disabled, onChange, ...others } = props;
 

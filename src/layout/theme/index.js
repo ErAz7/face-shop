@@ -1,6 +1,8 @@
+// app theme
+
 export default {
 	fontFamily: {
-		primary: `"krabuler", sans-serif`
+		primary: `Tahoma, Geneva, sans-serif`
 	},
 	palette: {
 		primary: { main: "rgb(97,137,48)" },

@@ -1,6 +1,6 @@
-// here are the API URLs
+// API URLs
 
-const BASE_PATH = "http://localhost:3000";
+const BASE_PATH = "http://192.168.1.5:3000";
 
 export const FETCH_PRODUCTS_URL = BASE_PATH + "/api/products";
 

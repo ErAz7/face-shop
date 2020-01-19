@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 
+// this renders the buttons for use in header
+// responsively
+
 const HeaderButton = props => {
 	const { disabled, value, onChange, ...others } = props;
 	return <Button variant="contained" {...others} />;
@@ -9,7 +12,7 @@ const HeaderButton = props => {
 
 export default styled(HeaderButton)`
 	font-size: 12px;
-	margin: 0 1%;
+	margin: 0 0.5%;
 	text-align: right;
 	cursor: ${({ disabled }) => (disabled ? "no-drop" : "pointer")};
 	&:hover {

@@ -8,7 +8,7 @@ import { useState } from "react";
 //  with three props: waiting, error, data
 //  2. fetch: a function that receives 3 args:
 //  request (axios request), success callback and
-//  failure callback
+//  failure callback and sends XHR request
 
 export default function() {
     const initialState = {

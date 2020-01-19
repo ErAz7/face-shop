@@ -3,6 +3,8 @@ import styled from "styled-components";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Skeleton from "@material-ui/lab/Skeleton";
 
+// renders price and a fake buy button
+
 const Footer = props => {
 	const { skeleton, price, ...others } = props;
 
@@ -14,9 +16,8 @@ const Footer = props => {
 		<div {...others}>
 			<Price>
 				<Dollar>$</Dollar>
-				{price / 100}
+				{price}
 			</Price>
-
 			<Buy>
 				<Cart />
 				Buy
@@ -29,6 +30,7 @@ const Dollar = styled.span`
 	font-size: 25px;
 	font-weight: bold;
 	margin-right: 8px;
+	vertical-align: top;
 `;
 
 const Price = styled.div`
@@ -44,16 +46,19 @@ const Price = styled.div`
 `;
 
 const Buy = styled.div`
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: 100%;
 	color: ${({ theme }) => theme.palette.ultraLight.main};
 	background-color: ${({ theme }) => theme.palette.primary.main};
-	font-size: 30px;
+	font-size: 24px;
 `;
 
 const Cart = styled(ShoppingCartIcon)`
 	font-size: inherit;
-	vertical-align: middle;
 	margin-right: 10px;
 `;
 
@@ -61,5 +66,4 @@ export default styled(Footer)`
 	height: 50px;
 	display: flex;
 	flex-wrap: nowrap;
-	align-items: center;
 `;

@@ -3,9 +3,11 @@ import styled from "styled-components";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Grid from "@material-ui/core/Grid";
-import LogoName from "./components/LogoName";
+import LogoText from "./components/LogoText";
 import SortBy from "./components/SortBy";
 import SortOptions from "./components/SortOptions";
+
+// renders app header responsively
 
 const Header = props => {
 	const { sortBy, onSortChange, sortDisabled, ...others } = props;
@@ -30,9 +32,9 @@ const Header = props => {
 		<header {...others}>
 			<Container container item {...breakpoints}>
 				{(!showSortBy || breakpointMatch.sm) && (
-					<LogoNameContainer>
-						<LogoName />
-					</LogoNameContainer>
+					<LogoTextContainer>
+						<LogoText text="Face Shop" />
+					</LogoTextContainer>
 				)}
 				<SortByContainer>
 					<SortBy
@@ -49,7 +51,7 @@ const Header = props => {
 	);
 };
 
-const LogoNameContainer = styled.div``;
+const LogoTextContainer = styled.div``;
 
 const SortByContainer = styled.div`
 	width: 100%;
@@ -69,6 +71,7 @@ export default styled(Header)`
 	position: fixed;
 	top: 0;
 	left: 0;
+	box-shadow: 0 0px 4px -2px ${({ theme }) => theme.palette.light.main};
 	background-color: ${({ theme }) => theme.palette.dark.main};
 	z-index: ${({ theme }) => theme.zIndex.max};
 	height: ${({ theme }) => theme.header.height.small}px;
