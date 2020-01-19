@@ -70,6 +70,7 @@ const Text = styled.div`
 	align-items: center;
 	top: 0;
 	left: 0;
+	white-space: nowrap;
 	font-size: ${({ size }) => size}px;
 `;
 

@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
-import Skeleton from "@material-ui/core/Button";
 import Face from "./components/Face";
 import Footer from "./components/Footer";
 
@@ -49,7 +48,7 @@ const RatioContainer = styled(Button)`
 `;
 
 export default styled(ProductCard)`
-	margin: 5px;
+	margin: 3% 0;
 	width: ${widths.xs}%;
 	${({ theme }) => theme.breakpoints.up("sm")} {
 		width: ${widths.sm}%;

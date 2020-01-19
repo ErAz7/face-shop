@@ -10,5 +10,16 @@ export default {
 		semiLight: { main: "rgb(106, 110, 113)" },
 		light: { main: "rgb(206, 210, 213)" },
 		ultraLight: { main: "white" }
+	},
+	header: {
+		height: {
+			small: "50",
+			medium: "70"
+		}
+	},
+	zIndex: {
+		min: 0,
+		med: 1,
+		max: 99999
 	}
 };

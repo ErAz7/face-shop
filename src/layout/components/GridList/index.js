@@ -6,7 +6,7 @@ const GridList = React.forwardRef((props, ref) => {
 	const { children, ...others } = props;
 	const breakpoints = {
 		xs: 11,
-		sm: 10
+		sm: 11
 	};
 	return (
 		<div ref={ref} {...others}>
