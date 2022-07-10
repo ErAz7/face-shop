@@ -2,26 +2,15 @@
 
 This is a tiny react app sample (without Redux). Fakes website that sells funny faces
 
-## Run
+## Install & Run
 
-**Download** or **Clone** this repo
-go to production folder and run
+### Server
 
-```batch
-npm install
-```
+go to `/server` and run `npm i` then `npm start`
 
-to install dependencies
-after installing, run
+### Client
 
-```batch
-npm start
-```
-
-to start server
-finally open browser and navigate to `localhost:3000`
-##client-source
-This is the source code for client
+go to `/client` and run `npm i` then `npm start`
 
 ## Packages used
 
